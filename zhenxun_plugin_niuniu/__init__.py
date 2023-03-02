@@ -86,7 +86,7 @@ async def _(event: GroupMessageEvent, state: T_State):
     content[group] = {}
   try:
     if content[group][qq]:
-      await niuzi_register.finish(Message("你已经注册过牛子啦！"), at_sender=True)
+      await niuzi_register.finish(Message("你已经有过牛子啦！"), at_sender=True)
   except KeyError:
     content[group][qq] = long
     readInfo('data/long.json', content)
@@ -109,11 +109,12 @@ async def _(event: GroupMessageEvent, state: T_State):
     group_user_jj[group][qq] = {}
   try:
     time_pass = int(time.time() - group_user_jj[group][qq]['time'])
-    if time_pass < 180:
-      time_rest = 180 - time_pass
+    if time_pass < 3600*6:
+      time_rest = 3600*6 - time_pass
       jj_refuse = [
-        f'才过去了{time_pass}s时间,你就又要击剑了，真是饥渴难耐啊',
-        f'不行不行，你的身体会受不了的，歇{time_rest}s再来吧',
+        f'才过去了{int(time_pass/60)}min时间,你就又要击剑了，真是饥渴难耐啊，{int(time_rest/60)}min后再来吧',
+        f'你这种男同就应该被送去集中营！等待{int(time_rest/60)}min再来吧',
+        f'打咩哟！你的牛牛会炸的，休息{int(time_rest/60)}min再来吧',
         ]
       await niuzi_fencing.finish(random.choice(jj_refuse), at_sender=True)
   except KeyError:
@@ -130,71 +131,71 @@ async def _(event: GroupMessageEvent, state: T_State):
     if len(at_list) >= 1:
       at = str(at_list[0])
       if len(at_list) >= 2:
-        result = "一战多？你的小身板扛得住吗？"
+        result = "你不准参加Impart┗|｀O′|┛"
       elif at != qq:
         try:
-          group_user_jj[group][qq]['time'] = time.time()
           opponent_long = de(str(content[group][at]))
+          group_user_jj[group][qq]['time'] = time.time()
           if opponent_long > my_long:
             probability = random.randint(1, 100)
-            if 0 < probability <= 45:
+            if 0 < probability <= 70:
               reduce = random_long()
               my_long = my_long - reduce
               if my_long < 0:
                 result = random.choice([
-                  f"哦吼！？看来你的牛子因为击剑而凹进去了呢！凹进去了{format(reduce,'.2f')}cm！",
-                  f"由于对方击剑技术过于高超，造成你的牛子凹了进去呢！凹进去了深{format(reduce,'.2f')}cm哦！",
-                  f"好惨啊，本来就不长的牛子现在凹进去了呢！凹进去了{format(reduce,'.2f')}cm呢！"
+                  f"哦吼！？你的牛子因为对方的大宝剑而凹进去了呢！你可怜的牛牛缩短了{format(reduce,'.1f')}cm！对方牛子增加相应的长度",
+                  f"对方狠狠的把牛子甩到了你的脸上，你的牛子缩短了{format(reduce,'.1f')}cm！对方牛子增加相应的长度",
+                  f"你突发恶疾只能弃牛保命，本来就不长的牛子现在又变短了捏！缩短了{format(reduce,'.1f')}cm！对方牛子增加相应的长度"
                 ])
               else:
-                result = f"对方以绝对的长度让你屈服了呢！你的长度减少{format(reduce,'.2f')}cm，当前长度{format(my_long,'.2f')}cm！对方增加相应的长度"
+                result = f"不自量力！对方以绝对的长度让你屈服了捏！你的牛牛长度减少{format(reduce,'.1f')}cm！对方牛子增加相应的长度"
               opponent_long = opponent_long + reduce
               content[group][qq] = my_long
               content[group][at] = opponent_long
               readInfo('data/long.json',content)
               
             else:
-              reduce = random_long()
+              reduce = random_long()*2
               opponent_long = opponent_long - reduce
               my_long = my_long + reduce
               if my_long < 0:
                 result = random.choice([
-                  f"哦吼！？你的牛子在长大欸！长大了{format(reduce,'.2f')}cm！",
-                  f"牛子凹进去的深度变浅了欸！变浅了{format(reduce,'.2f')}cm！"
+                  f"对方觉得与你击剑很舒服，你趁机使出了魅惑技能，你的深度变浅了{format(reduce,'.1f')}cm！对方牛子减少相应长度",
+                  f"你在击剑时成功吸收了对方部分阳气，牛子凹进去的深度变浅了欸！变浅了{format(reduce,'.1f')}cm！对方牛子减少相应长度"
                 ])
               else:
-                result = f"虽然你不够长，但是你逆袭了呢！你的长度增加{format(reduce,'.2f')}cm，当前长度{format(my_long,'.2f')}cm！对方减少相应的长度"
+                result = f"对方觉得与你击剑很舒服，这时你趁机噶掉了一截给自己接上，你的牛子变长了{format(reduce,'.1f')}cm！对方牛子减少相应长度"
               content[group][qq] = my_long
               content[group][at] = opponent_long
               readInfo('data/long.json',content)
               
           elif my_long > opponent_long:
             probability = random.randint(1, 100)
-            if 0 < probability <= 80:
+            if 0 < probability <= 70:
               reduce = random_long()
               opponent_long = opponent_long - reduce
               my_long = my_long + reduce
               if my_long < 0:
                 result = random.choice([
-                  f"哦吼！？你的牛子在长大欸！长大了{format(reduce,'.2f')}cm！",
-                  f"牛子凹进去的深度变浅了欸！变浅了{format(reduce,'.2f')}cm！"
+                  f"你们开始了激烈的击剑！最终还是你略胜一筹，你的深度变浅了{format(reduce,'.1f')}cm！对方牛子减少相应长度",
+                  f"你向对方使出了霸王硬上弓，牛子凹进去的深度变浅了欸！你的长度增加了{format(reduce,'.1f')}cm！对方牛子减少相应长度"
                 ])
               else:
-                result = f"你以绝对的长度让对方屈服了呢！你的长度增加{format(reduce,'.2f')}cm，当前长度{format(my_long,'.2f')}cm！对方减少相应的长度"
+                result = f"你把对方的牛子噶掉了一截接到了自己身上！你的长度增加{format(reduce,'.1f')}cm！对方牛子减少相应的长度"
               content[group][qq] = my_long
               content[group][at] = opponent_long
               readInfo('data/long.json',content)
             else:
-              reduce = random_long()
+              reduce = random_long()*2
               my_long = my_long - reduce
               if my_long < 0:
                 result = random.choice([
-                  f"哦吼！？看来你的牛子因为击剑而凹进去了呢！目前深度{format(reduce,'.2f')}cm！",
-                  f"由于对方击剑技术过于高超，造成你的牛子凹了进去呢！当前深度{format(reduce,'.2f')}cm！",
-                  f"好惨啊，本来就不长的牛子现在凹进去了呢！凹进去了{format(reduce,'.2f')}cm！"
+                  f"哦吼！？看来对方比你的魅力更大呢！牛子减少了{format(reduce,'.1f')}cm！对方牛子增加相应长度",
+                  f"对方向你抛了个媚眼，你被迷晕了，造成你的牛子凹了进去呢！牛子减少了{format(reduce,'.1f')}cm！对方牛子增加相应长度",
+                  f"你在击剑的过程中牛子一不小心被对方噶掉了一截！牛子减少了{format(reduce,'.1f')}cm！对方牛子增加相应长度"
                 ])
               else:
-                result = f"虽然你比较长，但是对方逆袭了呢！你的长度减少{format(reduce,'.2f')}cm，当前长度{format(my_long,'.2f')}cm！对方增加相应的长度"
+                result = f"虽然你有长度优势，但架不住对方会接化发！你的长度减少{format(reduce,'.1f')}cm！对方牛子增加相应的长度"
               opponent_long = opponent_long + reduce
               content[group][qq] = my_long
               content[group][at] = opponent_long
@@ -202,12 +203,12 @@ async def _(event: GroupMessageEvent, state: T_State):
         except KeyError:
           result = "对方还没有牛子呢，你不能和ta击剑！"
       else:
-        result = "不能和自己击剑哦！"
+        result = "不能和可爱的小真寻击剑哦(●'◡'●)"
     else:
-      result = "你要和谁击剑？你自己吗？"
+      result = "你要和谁击剑？你自己吗？请艾特你想要击剑的人！"
   except KeyError:
     del group_user_jj[group][qq]['time']
-    result = "你还没有牛子呢！不能击剑！"
+    result = "你还没有牛子呢！不能击剑！请发送 注册牛子"
   finally:
     await niuzi_fencing.finish(Message(result),at_sender=True)
 
@@ -218,51 +219,60 @@ async def _(event: GroupMessageEvent, state: T_State):
   content = readInfo("data/long.json")
   try:
     my_long = content[group][qq]
-    if my_long <= -50:
-      result = f"嗯....好像已经穿过了身体吧..从另一面来看也可以算是凸出来的吧?当前深度{format(my_long,'.2f')}cm"
-    elif -50 < my_long <= -25:
+    if my_long <= -100:
+      result = f"wtf？你已经进化成魅魔了！当前深度{format(my_long,'.1f')}cm"
+    elif my_long <= -50:
       result = random.choice([
-        f"这名女生，你的身体很健康哦！当前深度{format(my_long,'.2f')}cm",
-        f"WOW,真的凹进去了好多呢！当前深度{format(my_long,'.2f')}cm",
-        f"你已经是我们女孩子的一员啦！当前深度{format(my_long,'.2f')}cm"
+          f"嗯....好像已经穿过了身体吧..从另一面来看也可以算是凸出来的吧?当前深度{format(my_long,'.1f')}cm",
+          f"这名女生，你有当魅魔的潜力哦！当前深度{format(my_long,'.1f')}cm"
+        ])
+    elif -50 < my_long <= -20:
+      result = random.choice([
+        f"WOW,真的凹进去了好多呢！当前深度{format(my_long,'.1f')}cm",
+        f"你已经是我们女孩子的一员啦！当前深度{format(my_long,'.1f')}cm"
       ])
-    elif -25 < my_long <= -10:
+    elif -20 < my_long <= -10:
       result = random.choice([
-        f"你已经是一名女生了呢，当前深度{format(my_long,'.2f')}cm",
-        f"从女生的角度来说，你发育良好(,当前深度{format(my_long,'.2f')}cm",
-        f"你醒啦？你已经是一名女孩子啦！深度足足有{format(my_long,'.2f')}cm呢！",
-        f"唔....可以放进去一根手指了都....当前深度{format(my_long,'.2f')}cm"
+        f"你已经是一名女生了呢，当前深度{format(my_long,'.1f')}cm",
+        f"从女生的角度来说，你发育良好(,当前深度{format(my_long,'.1f')}cm",
+        f"你醒啦？你已经是一名女孩子啦！深度足足有{format(my_long,'.1f')}cm！",
+        f"唔....可以放进去一根手指了都....当前深度{format(my_long,'.1f')}cm"
       ])
     elif -10 < my_long <= 0:
       result = random.choice([
-        f"安了安了，不要伤心嘛，做女生有什么不好的啊。当前深度{format(my_long,'.2f')}cm",
-        f"不哭不哭，摸摸头，虽然很难再长出来，但是请不要伤心啦啊！当前深度{format(my_long,'.2f')}cm",
-        f"加油加油！我看好你哦！当前深度{format(my_long,'.2f')}cm",
-        f"你醒啦？你现在已经是一名女孩子啦！当前深度{format(my_long,'.2f')}cm"
+        f"安了安了，不要伤心嘛，做女生有什么不好的啊。当前深度{format(my_long,'.1f')}cm",
+        f"不哭不哭，摸摸头，虽然很难再长出来，但是请不要伤心啦啊！当前深度{format(my_long,'.1f')}cm",
+        f"加油加油！我看好你哦！当前深度{format(my_long,'.1f')}cm",
+        f"你醒啦？你现在已经是一名女孩子啦！当前深度{format(my_long,'.1f')}cm"
       ])
     elif 0 < my_long <= 10:
       result = random.choice([
-        f"你行不行啊？细狗！牛子长度才{format(my_long,'.2f')}cm！",
-        f"虽然短，但是...emmm....但是虽然短。当前长度{format(my_long,'.2f')}cm",
-        f"当前牛子长度{format(my_long,'.2f')}cm！！！"
+        f"你行不行啊？细狗！牛子长度才{format(my_long,'.1f')}cm！",
+        f"虽然短，但是...emmm....但是也很可爱捏。当前长度{format(my_long,'.1f')}cm",
+        f"小小的也很可爱啊，当前牛子长度{format(my_long,'.1f')}cm！！！"
       ])
     elif 10 < my_long <= 25:
       result = random.choice([
-        f"唔，当前牛子长度是{format(my_long,'.2f')}cm",
-        f"已经很长呢！当前长度{format(my_long,'.2f')}cm"
+        f"唔，当前牛子长度是{format(my_long,'.1f')}cm，还阔以啦~",
+        f"正常男性水平，当前牛子长度为{format(my_long,'.1f')}cm",
+        f"已经很长了呢！当前长度{format(my_long,'.1f')}cm"
       ])
     elif 25 < my_long <= 50:
       result = random.choice([
-        f"话说这种真的有可能吗？当前牛子长度{format(my_long,'.2f')}cm",
-        f"牛子长度居然是{format(my_long,'.2f')}cm呢！！！"
+        f"话说世界上真的有这种牛子存在吗？当前牛子长度{format(my_long,'.1f')}cm！",
+        f"厚礼谢，你的牛子长度居然有{format(my_long,'.1f')}cm！！！"
       ])
-    elif 50 < my_long:
+    elif 50 < my_long <=100:
       result = random.choice([
-        f"已经突破天际了嘛...当前牛子长度{format(my_long,'.2f')}cm",
-        f"唔...这玩意应该不会变得比我高吧？当前牛子长度{format(my_long,'.2f')}cm"
+        f"你这个长度会死人的...当前牛子长度{format(my_long,'.1f')}cm！",
+        f"你马上要进化成牛头人了！当前牛子长度{format(my_long,'.1f')}cm！",
+        f"唔...这玩意应该不会变得比我高吧？当前牛子长度{format(my_long,'.1f')}cm！",
+        f"你是什么怪物，不要过来啊！当前牛子长度{format(my_long,'.1f')}cm！"
       ])
+    elif 100 < my_long:
+      result = f"惊世骇俗！你已经进化成牛头人了！当前牛子长度{format(my_long,'.1f')}cm！！！"
   except KeyError:
-    result = "你还没有牛子呢！"
+    result = "你还没有牛子呢！请发送 注册牛子"
   finally:
     await niuzi_my.finish(Message(result),at_sender=True)
 
@@ -328,52 +338,54 @@ async def _(event: GroupMessageEvent, state: T_State):
     group_hit_glue[group][qq] = {}
   try:
     time_pass = int(time.time() - group_hit_glue[group][qq]['time'])
-    if time_pass < 180:
-      time_rest = 180 - time_pass
+    if time_pass < 3600*6:
+      time_rest = 3600*6 - time_pass
       glue_refuse = [
-        f'才过去了{time_pass}s时间,你就又要打胶了，身体受得住吗',
-        f'不行不行，你的身体会受不了的，歇{time_rest}s再来吧'
+        f'才过去了{int(time_pass/60)}min,你就又要打胶了，牛牛受得住吗？{int(time_rest/60)}min后再来吧',
+        f'休息一下吧，会炸膛的！{int(time_rest/60)}min后再来吧',
+        f'打咩哟，你的牛牛会受炸的，休息{int(time_rest/60)}min再来吧'
         ]
       await niuzi_hit_glue.finish(random.choice(glue_refuse), at_sender=True)
   except KeyError:
     pass
   try:
-    group_hit_glue[group][qq]['time'] = time.time()
     content = readInfo("data/long.json")
     my_long = de(str(content[group][qq]))
+    group_hit_glue[group][qq]['time'] = time.time()
     probability = random.randint(1, 100)
-    if 0 < probability <= 40:
+    if 0 < probability <= 50:
       reduce = random_long()
       my_long = my_long + reduce
       result = random.choice([
-        f"你的打胶促进了牛子发育，牛子增加{format(reduce,'.2f')}cm了呢！",
-        f"你的牛子在众人震惊的目光下增加了{format(reduce,'.2f')}cm呢！"
+        f"你嘿咻嘿咻一下，促进了牛子发育，牛子增加{format(reduce,'.1f')}cm了！",
+        f"你在众目睽睽下打完了胶，你的牛子在众人震惊的目光下增加了{format(reduce,'.1f')}cm！"
         ])
-    elif 40 < probability <= 60:
+    elif 50 < probability <= 70:
       result = random.choice([
-        "你打了个胶，什么变化也没有",
-        "你的牛子刚开始变长了，可过了一会又回来了，什么变化也没有"
+        "你打了个胶，但是什么变化也没有，好奇怪捏~",
+        "你的牛子刚开始变长了，可过了一会又回来了，什么变化也没有，好奇怪捏~"
         ])
     else:
       reduce = random_long()
       my_long = my_long - reduce
       if my_long < 0:
         result = random.choice([
-          f"哦吼！？看来你的牛子凹进去了{format(reduce,'.2f')}cm呢！",
-          f"你因为打胶过度导致牛子凹了进去{format(reduce,'.2f')}cm呢！"
+          f"你已经变成女生了哦！你的牛子凹进去了{format(reduce,'.1f')}cm！",
+          f"你突发恶疾！你的牛子凹进去了{format(reduce,'.1f')}cm！",
+          f"笑死，你因为打胶过度导致牛子凹进去了{format(reduce,'.1f')}cm！"
         ])
       else:
         result = random.choice([
-          f"阿哦，你过度打胶，牛子缩短{format(reduce,'.2f')}cm了呢！",
-          f"你的牛子变长了很多，你很激动地继续打胶，造成牛子不但没增加还缩短{format(reduce,'.2f')}cm了呢！"
+          f"小打怡情，大打伤身，强打灰飞烟灭！你过度打胶，牛子缩短了{format(reduce,'.1f')}cm捏！",
+          f"你的牛子变长了许多，你很激动地继续打胶，但是牛子不但没变长还缩短了{format(reduce,'.1f')}cm！"
           ])
     content[group][qq] = my_long
     readInfo('data/long.json',content)
   except KeyError:
     del group_hit_glue[group][qq]['time']
     result = random.choice([
-      "你还没有牛子呢！不能打胶！",
-      "无牛子，打胶不要的"
+      "你还没有牛子呢！不能打胶！请发送 注册牛子",
+      "无牛子，打胶不要的，请发送 注册牛子"
       ])
   finally:
     await niuzi_hit_glue.finish(Message(result),at_sender=True)
