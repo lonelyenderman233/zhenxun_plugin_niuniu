@@ -203,7 +203,7 @@ async def _(event: GroupMessageEvent, state: T_State):
         except KeyError:
           result = "对方还没有牛子呢，你不能和ta击剑！"
       else:
-        result = "不能和可爱的小真寻击剑哦(●'◡'●)"
+        result = "你要和谁击剑？你自己吗？请艾特你想要击剑的人！"
     else:
       result = "你要和谁击剑？你自己吗？请艾特你想要击剑的人！"
   except KeyError:
@@ -343,7 +343,7 @@ async def _(event: GroupMessageEvent, state: T_State):
       glue_refuse = [
         f'才过去了{int(time_pass/60)}min,你就又要打胶了，牛牛受得住吗？{int(time_rest/60)}min后再来吧',
         f'休息一下吧，会炸膛的！{int(time_rest/60)}min后再来吧',
-        f'打咩哟，你的牛牛会受炸的，休息{int(time_rest/60)}min再来吧'
+        f'打咩哟，你的牛牛会爆炸的，休息{int(time_rest/60)}min再来吧'
         ]
       await niuzi_hit_glue.finish(random.choice(glue_refuse), at_sender=True)
   except KeyError:
