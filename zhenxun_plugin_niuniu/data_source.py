@@ -72,34 +72,44 @@ def fencing(my, oppo, at, qq, group, content):
         content (dic): 数据
     """
     probability = random.randint(1, 100)
-    if oppo <= -100 and 100 > my > 0 and 0 < probability <= 20:
+    if oppo <= -100 and 100 > my > 0 and 0 < probability <= 20: #对方魅魔，自己普通正牛子，20%被吞噬
         my = 0
-        result = f"对方身为魅魔诱惑了你，你的牛子被吞噬了！"
+        result = f"当你凝视深渊时，深渊也在凝视你！你的牛子被吞噬了！"
         content[group][qq] = my
         readInfo('data/long.json', content)
-    elif oppo <= -100 and my >= 100 and 0 < probability <= 10:
+    elif oppo <= -100 and my >= 100 and 0 < probability <= 10: #对方魅魔，自己牛头人，10%被吞噬
         my = 0
         result = f"虽然你是牛头人，但对方身为稀有魅魔依然吞噬了你的牛子！"
         content[group][qq] = my
         readInfo('data/long.json', content)
-    elif oppo >= 100 and 100 > my > -100 and 0 < probability <= 10:
+    elif oppo <= -100 and my >= 100 and 10 < probability <= 15: #对方魅魔，自己牛头人，5%将对方归0
+        oppo = 0
+        result = f"虽然对方是魅魔，但你发动牛神之力依然将其牛子归0！"
+        content[group][at] = oppo
+        readInfo('data/long.json', content)
+    elif oppo >= 100 and 100 > my > -100 and 0 < probability <= 10: #对方牛头人，自己正常牛子，10%被归0
         my = 0
         result = f"对方使出了蛮牛冲撞！你的牛子归0！"
         content[group][qq] = my
         readInfo('data/long.json', content)
-    elif my <= -100 and 100 > oppo > 0 and 0 < probability <= 20:
+    elif my <= -100 and 100 > oppo > 0 and 0 < probability <= 20: #对方普正牛，自己魅魔，20%吞噬对方
         oppo = 0
         result = f"你身为魅魔诱惑了对方，吞噬了对方全部长度！"
         content[group][at] = oppo
         readInfo('data/long.json', content)
-    elif my <= -100 and oppo >= 100 and 0 < probability <= 10:
+    elif my <= -100 and oppo >= 100 and 0 < probability <= 10:  #对方牛头人，自己魅魔，10%吞噬对方
         oppo = 0
         result = f"虽然对方是牛头人，但你身为稀有魅魔依然吞噬了对方的牛子！"
         content[group][at] = oppo
         readInfo('data/long.json', content)
-    elif my >= 100 and 100 > oppo > -100 and 0 < probability <= 10:
+    elif my <= -100 and oppo >= 100 and 10 < probability <= 15:  #对方牛头人，自己魅魔，5%被对方归0
+        my = 0
+        result = f"虽然你是魅魔，但对方牛神附体将你牛子归0！"
+        content[group][qq] = my
+        readInfo('data/long.json', content)
+    elif my >= 100 and 100 > oppo > -100 and 0 < probability <= 10: #对方正常牛子，自己牛头人，10%将对方归0
         oppo = 0
-        result = f"你使出了蛮牛冲撞！对方牛牛长度归0！"
+        result = f"你使出了蛮牛冲撞！对方牛子长度归0！"
         content[group][at] = oppo
         readInfo('data/long.json', content)
     else:
