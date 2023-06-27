@@ -23,7 +23,7 @@ def pic2b64(pic: Image) -> str:
     buf = BytesIO()
     pic.save(buf, format="PNG")
     base64_str = base64.b64encode(buf.getvalue()).decode()
-    return "base64://" + base64_str
+    return f"base64://{base64_str}"
 
 def random_long():
     """
@@ -74,44 +74,36 @@ def fencing(my, oppo, at, qq, group, content):
     probability = random.randint(1, 100)
     if oppo <= -100 and 100 > my > 0 and 0 < probability <= 20: #对方魅魔，自己普通正牛子，20%被吞噬
         my = 0
-        result = f"当你凝视深渊时，深渊也在凝视你！你的牛子被吞噬了！"
+        result = "当你凝视深渊时，深渊也在凝视你！你的牛子被吞噬了！"
         content[group][qq] = my
-        readInfo('data/long.json', content)
     elif oppo <= -100 and my >= 100 and 0 < probability <= 10: #对方魅魔，自己牛头人，10%被吞噬
         my = 0
-        result = f"虽然你是牛头人，但对方身为稀有魅魔依然吞噬了你的牛子！"
+        result = "虽然你是牛头人，但对方身为稀有魅魔依然吞噬了你的牛子！"
         content[group][qq] = my
-        readInfo('data/long.json', content)
     elif oppo <= -100 and my >= 100 and 10 < probability <= 15: #对方魅魔，自己牛头人，5%将对方归0
         oppo = 0
-        result = f"虽然对方是魅魔，但你发动牛神之力依然将其牛子归0！"
+        result = "虽然对方是魅魔，但你发动牛神之力依然将其牛子归0！"
         content[group][at] = oppo
-        readInfo('data/long.json', content)
     elif oppo >= 100 and 100 > my > -100 and 0 < probability <= 10: #对方牛头人，自己正常牛子，10%被归0
         my = 0
-        result = f"对方使出了蛮牛冲撞！你的牛子归0！"
+        result = "对方使出了蛮牛冲撞！你的牛子归0！"
         content[group][qq] = my
-        readInfo('data/long.json', content)
     elif my <= -100 and 100 > oppo > 0 and 0 < probability <= 20: #对方普正牛，自己魅魔，20%吞噬对方
         oppo = 0
-        result = f"你身为魅魔诱惑了对方，吞噬了对方全部长度！"
+        result = "你身为魅魔诱惑了对方，吞噬了对方全部长度！"
         content[group][at] = oppo
-        readInfo('data/long.json', content)
     elif my <= -100 and oppo >= 100 and 0 < probability <= 10:  #对方牛头人，自己魅魔，10%吞噬对方
         oppo = 0
-        result = f"虽然对方是牛头人，但你身为稀有魅魔依然吞噬了对方的牛子！"
+        result = "虽然对方是牛头人，但你身为稀有魅魔依然吞噬了对方的牛子！"
         content[group][at] = oppo
-        readInfo('data/long.json', content)
     elif my <= -100 and oppo >= 100 and 10 < probability <= 15:  #对方牛头人，自己魅魔，5%被对方归0
         my = 0
         result = f"虽然你是魅魔，但对方牛神附体将你牛子归0！"
         content[group][qq] = my
-        readInfo('data/long.json', content)
     elif my >= 100 and 100 > oppo > -100 and 0 < probability <= 10: #对方正常牛子，自己牛头人，10%将对方归0
         oppo = 0
         result = f"你使出了蛮牛冲撞！对方牛子长度归0！"
         content[group][at] = oppo
-        readInfo('data/long.json', content)
     else:
         if oppo > my:
             probability = random.randint(1, 100)
@@ -133,9 +125,6 @@ def fencing(my, oppo, at, qq, group, content):
                         f"对方以绝对长度让你屈服了呢！你的长度减少{format(reduce,'.2f')}cm！对方牛子增加相应长度！"
                     ])
                 oppo = oppo + reduce
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
             else:
                 reduce = fence(abs(my)+abs(oppo))*2
                 oppo = oppo - reduce
@@ -152,9 +141,6 @@ def fencing(my, oppo, at, qq, group, content):
                         f"对方觉得你的深度很舒服，但你却偷袭了对方！你的牛子增加了{format(reduce,'.2f')}cm！对方牛子减少相应长度！",
                         f"虽然你不够长，但是你逆袭了呢！你的长度增加{format(reduce,'.2f')}cm，对方牛子减少相应长度！"
                     ])
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
         elif my > oppo:
             probability = random.randint(1, 100)
             if 0 < probability <= 70:
@@ -171,9 +157,6 @@ def fencing(my, oppo, at, qq, group, content):
                         f"你把牛子狠狠地甩到了对方脸上！你的牛子增加{format(reduce,'.2f')}cm，对方牛子减少相应长度！",
                         f"你向对方使出了松果痰抖闪电鞭！你的牛子增加了{format(reduce,'.2f')}cm！对方牛子减少相应长度！"
                     ])
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
             else:
                 reduce = fence(abs(my)+abs(oppo))*2
                 my = my - reduce
@@ -188,9 +171,6 @@ def fencing(my, oppo, at, qq, group, content):
                         f"原来对方是深藏不漏的牛林高手，造成你的牛子缩短了{format(reduce,'.2f')}cm呢！对方牛子增加相应长度！",
                     ])
                 oppo = oppo + reduce
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
         else:
             probability = random.randint(1, 100)
             reduce = fence(abs(my)+abs(oppo))
@@ -204,9 +184,6 @@ def fencing(my, oppo, at, qq, group, content):
                     ])
                 else:
                     result = f"你以高超的鸡艺让对方屈服啦！你的长度增加{format(reduce,'.2f')}cm，当前长度{format(my,'.2f')}cm！"
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
             else:
                 my = my - reduce
                 if my < 0:
@@ -218,9 +195,9 @@ def fencing(my, oppo, at, qq, group, content):
                 else:
                     result = f"由于对方击剑技术过于高超，你的长度减少{format(reduce,'.2f')}cm，当前长度{format(my,'.2f')}cm！"
                 oppo = oppo + reduce
-                content[group][qq] = my
-                content[group][at] = oppo
-                readInfo('data/long.json', content)
+        content[group][qq] = my
+        content[group][at] = oppo
+    readInfo('data/long.json', content)
     return result
 
 async def init_rank(
@@ -238,7 +215,7 @@ async def init_rank(
     """
     _uname_lst = []
     _num_lst = []
-    for i in range(len(all_user_id) if len(all_user_id) < total_count else total_count):
+    for _ in range(min(len(all_user_id), total_count)):
         _max = max(all_user_data)
         max_user_id = all_user_id[all_user_data.index(_max)]
         all_user_id.remove(max_user_id)
